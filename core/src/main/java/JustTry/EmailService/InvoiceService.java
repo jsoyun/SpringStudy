@@ -15,8 +15,6 @@ public class InvoiceService extends Service {
 
     @Override
     public void execute() {
-        //보낼 편지함에 Invoice가 있으면 전송
-        //모든 동작을 Management 하나가 처리.
         Sender sender = new Sender();
         Reciever reciever = new Reciever();
         sender.setName("이소윤");

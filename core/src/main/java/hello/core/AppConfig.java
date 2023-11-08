@@ -15,18 +15,23 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
     @Bean //각 메서드에 빈 적어준다.
     public MemberService memberService(){
+        System.out.println("call AppConfig.memberService");
         return new MemberServiceImpl(memberRepository()); //생성자 주입
 
     }
     @Bean
-    public static MemoryMemberRepository memberRepository() {
+    public MemoryMemberRepository memberRepository() {
+        System.out.println("call AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
 
     //    public Order
     @Bean
     public OrderService orderService(){
+        System.out.println("call AppConfig.orderService");
+
         return new OrderServiceImpl(memberRepository(), discountPolicy());
+
     }
 
     @Bean
