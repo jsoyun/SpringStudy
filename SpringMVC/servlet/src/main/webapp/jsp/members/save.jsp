@@ -20,7 +20,7 @@
     <title>Title</title>
 </head>
 <body>
-성공
+성공save.jsp
 <ul>
     <li>id<%= member.getId()%></li>
     <li>username<%=member.getUsername()%></li>
