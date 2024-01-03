@@ -1,7 +1,7 @@
 package hello.itemservice.domain;
 
-import hello.springmvc.itemservice.domain.Item;
-import hello.springmvc.itemservice.domain.ItemRepository;
+import hello.springmvc.itemservice.domain.Item.Item;
+import hello.springmvc.itemservice.domain.Item.ItemRepository;
 import hello.springmvc.itemservice.domain.dto.ItemUpdateParamDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

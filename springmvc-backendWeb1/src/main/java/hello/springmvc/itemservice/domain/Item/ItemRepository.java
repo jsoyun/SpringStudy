@@ -1,4 +1,4 @@
-package hello.springmvc.itemservice.domain;
+package hello.springmvc.itemservice.domain.Item;
 
 import hello.springmvc.itemservice.domain.dto.ItemUpdateParamDto;
 import org.springframework.stereotype.Repository;
@@ -35,6 +35,10 @@ public class ItemRepository { //아이템 저장소
         findItem.setItemName(itemUpdateParamDto.getItemName());
         findItem.setPrice(itemUpdateParamDto.getPrice());
         findItem.setQuantity(itemUpdateParamDto.getQuantity());
+        findItem.setOpen(itemUpdateParamDto.getOpen());
+        findItem.setRegions(itemUpdateParamDto.getRegions());
+        findItem.setItemType(itemUpdateParamDto.getItemType());
+        findItem.setDeliveryCode(itemUpdateParamDto.getDeliveryCode());
 
     }
 
