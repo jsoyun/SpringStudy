@@ -38,7 +38,7 @@ public class BasicItemController {
         List<Item> items = itemRepository.findAll();
         log.info("getmapping items = {}", items);
         model.addAttribute("items", items);
-        return "basic/items";
+        return "basic/springmvc1/items";
 
     }
 
@@ -46,13 +46,13 @@ public class BasicItemController {
     public String item(@PathVariable Long itemId, Model model) {
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
-        return "basic/item";
+        return "basic/springmvc1/item";
 
     }
 
     @GetMapping("/add")
     public String addForm() {
-        return "basic/addForm";
+        return "basic/springmvc1/addForm";
     }
 
     //    @PostMapping("/add")
@@ -69,7 +69,7 @@ public class BasicItemController {
 
         model.addAttribute("item", item1);
 
-        return "basic/item";
+        return "basic/springmvc1/item";
 
     }
 
@@ -107,7 +107,7 @@ public class BasicItemController {
     public String editForm(@PathVariable Long itemId, Model model) {
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
-        return "basic/editForm";
+        return "basic/springmvc1/editForm";
     }
 
     @PostMapping("/{itemId}/edit")
@@ -120,7 +120,6 @@ public class BasicItemController {
     /**
      * 테스트용 데이터 추가
      */
-
     @PostConstruct
     public void init() {
 
