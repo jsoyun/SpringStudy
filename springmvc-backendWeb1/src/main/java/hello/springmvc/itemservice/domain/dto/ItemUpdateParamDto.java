@@ -21,4 +21,7 @@ public class ItemUpdateParamDto {
     private String deliveryCode; //배송방식
 
 
+    public ItemUpdateParamDto() {
+
+    }
 }

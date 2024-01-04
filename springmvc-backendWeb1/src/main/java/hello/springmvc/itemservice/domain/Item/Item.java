@@ -31,5 +31,17 @@ public class Item {
 
     }
 
-
+    @Override
+    public String toString() {
+        return "Item{" +
+            "id=" + id +
+            ", itemName='" + itemName + '\'' +
+            ", price=" + price +
+            ", quantity=" + quantity +
+            ", open=" + open +
+            ", regions=" + regions +
+            ", itemType=" + itemType +
+            ", deliveryCode='" + deliveryCode + '\'' +
+            '}';
+    }
 }
