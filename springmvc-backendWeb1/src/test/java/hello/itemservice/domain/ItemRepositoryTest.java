@@ -60,7 +60,7 @@ class ItemRepositoryTest {
 
 
         //when
-        ItemUpdateParamDto itemUpdateParamDto = new ItemUpdateParamDto();
+        ItemUpdateParamDto itemUpdateParamDto = new ItemUpdateParamDto("newItem", 2000, 10);
         itemRepository.update(itemId, itemUpdateParamDto);
 
         //then

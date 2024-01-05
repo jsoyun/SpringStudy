@@ -5,7 +5,6 @@ import hello.springmvc.itemservice.domain.Item.Item;
 import hello.springmvc.itemservice.domain.Item.ItemRepository;
 import hello.springmvc.itemservice.domain.Item.ItemType;
 import hello.springmvc.itemservice.domain.dto.ItemUpdateParamDto;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -329,14 +328,14 @@ public class ValidationItemControllerV2 {
     /**
      * 테스트용 데이터 추가
      */
-    @PostConstruct
-    public void init() {
-
-        itemRepository.save(new Item("itemAv2", 1000, 10));
-        itemRepository.save(new Item("itemBv2", 1000, 10));
-        log.info("itemRepository= {}", itemRepository);
-
-    }
+//    @PostConstruct
+//    public void init() {
+//
+//        itemRepository.save(new Item("itemAv2", 1000, 10));
+//        itemRepository.save(new Item("itemBv2", 1000, 10));
+//        log.info("itemRepository= {}", itemRepository);
+//
+//    }
 }
 
 
