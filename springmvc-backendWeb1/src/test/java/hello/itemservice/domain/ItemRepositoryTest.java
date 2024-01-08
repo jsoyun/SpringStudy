@@ -1,8 +1,7 @@
 package hello.itemservice.domain;
 
-import hello.springmvc.itemservice.domain.Item.Item;
 import hello.springmvc.itemservice.domain.Item.ItemRepository;
-import hello.springmvc.itemservice.domain.dto.ItemUpdateParamDto;
+import hello.springmvc.itemservice.domain.dto.Item;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,28 +22,28 @@ class ItemRepositoryTest {
     @Test
     void sava() {
         //given
-        Item item = new Item("itemA", 10000, 10);
+        hello.springmvc.itemservice.domain.Item.Item item = new hello.springmvc.itemservice.domain.Item.Item("itemA", 10000, 10);
 
         //when
-        Item savedItem = itemRepository.save(item);
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item);
 
         //then
-        Item findItem = itemRepository.findById(item.getId());
+        hello.springmvc.itemservice.domain.Item.Item findItem = itemRepository.findById(item.getId());
         assertThat(findItem).isEqualTo(savedItem);
     }
 
     @Test
     void findAll() {
         //given
-        Item item = new Item("itemA", 10000, 10);
-        Item item2 = new Item("item2", 20000, 20);
+        hello.springmvc.itemservice.domain.Item.Item item = new hello.springmvc.itemservice.domain.Item.Item("itemA", 10000, 10);
+        hello.springmvc.itemservice.domain.Item.Item item2 = new hello.springmvc.itemservice.domain.Item.Item("item2", 20000, 20);
 
         itemRepository.save(item);
         itemRepository.save(item2);
 
 
         //when
-        List<Item> result = itemRepository.findAll();
+        List<hello.springmvc.itemservice.domain.Item.Item> result = itemRepository.findAll();
 
         //then
         assertThat(result.size()).isEqualTo(2);
@@ -53,18 +52,18 @@ class ItemRepositoryTest {
     @Test
     void updateItem() {
         //given
-        Item item = new Item("itemA", 10000, 10);
+        hello.springmvc.itemservice.domain.Item.Item item = new hello.springmvc.itemservice.domain.Item.Item("itemA", 10000, 10);
 
-        Item savedItem = itemRepository.save(item);
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item);
         Long itemId = savedItem.getId();
 
 
         //when
-        ItemUpdateParamDto itemUpdateParamDto = new ItemUpdateParamDto("newItem", 2000, 10);
+        Item itemUpdateParamDto = new Item("newItem", 2000, 10);
         itemRepository.update(itemId, itemUpdateParamDto);
 
         //then
-        Item findItem = itemRepository.findById(itemId);
+        hello.springmvc.itemservice.domain.Item.Item findItem = itemRepository.findById(itemId);
         assertThat(findItem.getItemName()).isEqualTo(itemUpdateParamDto.getItemName());
         assertThat(findItem.getPrice()).isEqualTo(itemUpdateParamDto.getPrice());
         assertThat(findItem.getQuantity()).isEqualTo(itemUpdateParamDto.getQuantity());

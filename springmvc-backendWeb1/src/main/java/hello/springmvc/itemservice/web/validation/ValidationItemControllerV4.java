@@ -4,27 +4,38 @@ import hello.springmvc.itemservice.domain.Item.DeliveryCode;
 import hello.springmvc.itemservice.domain.Item.Item;
 import hello.springmvc.itemservice.domain.Item.ItemRepository;
 import hello.springmvc.itemservice.domain.Item.ItemType;
+import hello.springmvc.itemservice.web.validation.form.ItemSaveForm;
+import hello.springmvc.itemservice.web.validation.form.ItemUpdateForm;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Controller
-@RequestMapping("/v1/basic/items")
+@RequestMapping("/v4/basic/items")
 @RequiredArgsConstructor
-public class ValidationItemControllerV1 {
-
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
+public class ValidationItemControllerV4 {
 
     private final ItemRepository itemRepository;
+//    private final ItemValidator itemValidator;
+//
+//
+//    @InitBinder
+//    public void init(WebDataBinder dataBinder) {
+//        dataBinder.addValidators(itemValidator);
+//
+//    }
 
 
     //모델에 자동으로 담기게 된다
@@ -61,7 +72,7 @@ public class ValidationItemControllerV1 {
         List<hello.springmvc.itemservice.domain.Item.Item> items = itemRepository.findAll();
         log.info("getmapping items = {}", items);
         model.addAttribute("items", items);
-        return "validation/v1/items";
+        return "validation/v4/items";
 
     }
 
@@ -69,7 +80,8 @@ public class ValidationItemControllerV1 {
     public String item(@PathVariable Long itemId, Model model) {
         hello.springmvc.itemservice.domain.Item.Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
-        return "validation/v1/item";
+        return "validation/v4/item";
+
 
     }
 
@@ -77,57 +89,43 @@ public class ValidationItemControllerV1 {
     public String addForm(Model model) {
         model.addAttribute("item", new hello.springmvc.itemservice.domain.Item.Item());
 
-        return "validation/v1/addForm";
+        return "validation/v4/addForm";
     }
 
 
     @PostMapping("/add")
-    public String addItem4(hello.springmvc.itemservice.domain.Item.Item item1, RedirectAttributes redirectAttributes, Model model) {
+    public String addItem(@Validated @ModelAttribute("item") ItemSaveForm itemSaveForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        log.info("objectName = {}", bindingResult.getObjectName());
+        log.info("target = {}", bindingResult.getTarget());
 
-        //검증오류 결과를 보관
-        Map<String, String> errors = new HashMap<>();
-        //검증로직
-        if (!StringUtils.hasText(item1.getItemName())) {
-            errors.put("itemName", "상품 이름은 필수입니다.");
-        }
-        if (item1.getPrice() == null || item1.getPrice() < 1000 || item1.getPrice() > 1000000) {
-            errors.put("price", "가격은 1,000~ 1,000,000까지 허용합니다.");
-        }
-        if (item1.getQuantity() == null || item1.getQuantity() >= 9999) {
-            errors.put("quantity", "수량은 최대 9,999까지 허용합니다.");
-        }
+
         //특정필드가 아닌 복합 룰 검증
-        if (item1.getPrice() != null && item1.getQuantity() != null) {
-            int resultPrice = item1.getPrice() * item1.getQuantity();
+        if (itemSaveForm.getPrice() != null && itemSaveForm.getQuantity() != null) {
+            int resultPrice = itemSaveForm.getPrice() * itemSaveForm.getQuantity();
             if (resultPrice < 10000) {
-                errors.put("globalError", "가격*수량의 합은 10,000원 이상이어야 합니다. 현재 값 = " + resultPrice);
+                bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
             }
         }
         //검증에 실패하면 다시 입력 폼으로
-        if (!errors.isEmpty()) {
-            log.info("error = {}", errors);
-            model.addAttribute("errors", errors);
-            return "validation/v1/addForm";
+        if (bindingResult.hasErrors()) {
+            log.info("error = {}", bindingResult);
+            return "validation/v4/addForm";
 
         }
 
-        log.info("item.open={}", item1.getOpen());
-        log.info("item.region={}", item1.getRegions());
-        log.info("item.itemType={}", item1.getItemType());
-        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item1);
+        //TODO: 변경) getter, setter보다 생성자에서 만들어주는게 더 좋다
+        hello.springmvc.itemservice.domain.Item.Item item = new hello.springmvc.itemservice.domain.Item.Item();
+        item.setItemName(itemSaveForm.getItemName());
+        item.setPrice(itemSaveForm.getPrice());
+        item.setQuantity(itemSaveForm.getQuantity());
+
+
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("IsSaved", true);
-        return "redirect:/v1/basic/items/{itemId}";
+        return "redirect:/v4/basic/items/{itemId}";
 
     }
-
-//    private boolean hasError(Map<String, String> errors) {
-//        if (!errors.isEmpty()) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
 
 
     @GetMapping("/{itemId}/edit")
@@ -135,18 +133,41 @@ public class ValidationItemControllerV1 {
         hello.springmvc.itemservice.domain.Item.Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
         log.info("edit open = {}", item.getOpen());
-        return "validation/v1/editForm";
+        return "validation/v4/editForm";
     }
+
 
     @PostMapping("/{itemId}/edit")
-    public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
+    public String edit(@PathVariable Long itemId, @Validated @ModelAttribute("item") ItemUpdateForm itemUpdateForm, BindingResult bindingResult) {
+
+        //특정필드가 아닌 복합 룰 검증
+        if (itemUpdateForm.getPrice() != null && itemUpdateForm.getQuantity() != null) {
+            int resultPrice = itemUpdateForm.getPrice() * itemUpdateForm.getQuantity();
+            if (resultPrice < 10000) {
+                bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
+            }
+        }
+        //검증에 실패하면 다시 입력 폼으로
+        if (bindingResult.hasErrors()) {
+            log.info("edit error = {}", bindingResult);
+            return "validation/v4/addForm";
+
+        }
+
+
+        //item으로 받고 그 값들을
+        //dto로 변환해서 넘기면 되지 않을까?
+        Item item = new Item();
+        item.setItemName(itemUpdateForm.getItemName());
+        item.setPrice(itemUpdateForm.getPrice());
+        item.setQuantity(itemUpdateForm.getQuantity());
+
+
         itemRepository.update(itemId, item);
         log.info("itemUpdateParamDto open ={}", item.getOpen());
-        log.info("edit regions = {}", item.getRegions());
-        return "redirect:v1/basic/items/{itemId}";
+        return "redirect:/v4/basic/items/{itemId}";
 
     }
-
 
     /**
      * 테스트용 데이터 추가
@@ -154,8 +175,8 @@ public class ValidationItemControllerV1 {
     @PostConstruct
     public void init() {
 
-        itemRepository.save(new hello.springmvc.itemservice.domain.Item.Item("itemAv1", 1000, 10));
-        itemRepository.save(new hello.springmvc.itemservice.domain.Item.Item("itemBv1", 1000, 10));
+        itemRepository.save(new hello.springmvc.itemservice.domain.Item.Item("itemAv3", 1000, 10));
+        itemRepository.save(new hello.springmvc.itemservice.domain.Item.Item("itemBv3", 1000, 10));
         log.info("itemRepository= {}", itemRepository);
 
     }

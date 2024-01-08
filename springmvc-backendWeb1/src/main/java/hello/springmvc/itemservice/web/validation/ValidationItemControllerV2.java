@@ -4,7 +4,6 @@ import hello.springmvc.itemservice.domain.Item.DeliveryCode;
 import hello.springmvc.itemservice.domain.Item.Item;
 import hello.springmvc.itemservice.domain.Item.ItemRepository;
 import hello.springmvc.itemservice.domain.Item.ItemType;
-import hello.springmvc.itemservice.domain.dto.ItemUpdateParamDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -67,7 +66,7 @@ public class ValidationItemControllerV2 {
     @GetMapping
     public String items(Model model) {
 
-        List<Item> items = itemRepository.findAll();
+        List<hello.springmvc.itemservice.domain.Item.Item> items = itemRepository.findAll();
         log.info("getmapping items = {}", items);
         model.addAttribute("items", items);
         return "validation/v2/items";
@@ -76,7 +75,7 @@ public class ValidationItemControllerV2 {
 
     @GetMapping("/{itemId}") //itemId
     public String item(@PathVariable Long itemId, Model model) {
-        Item item = itemRepository.findById(itemId);
+        hello.springmvc.itemservice.domain.Item.Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
         return "validation/v2/item";
 
@@ -85,14 +84,14 @@ public class ValidationItemControllerV2 {
 
     @GetMapping("/add")
     public String addForm(Model model) {
-        model.addAttribute("item", new Item());
+        model.addAttribute("item", new hello.springmvc.itemservice.domain.Item.Item());
 
         return "validation/v2/addForm";
     }
 
 
     //    @PostMapping("/add")
-    public String addItemV1(Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String addItemV1(hello.springmvc.itemservice.domain.Item.Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         //검증오류 결과를 보관
         Map<String, String> errors = new HashMap<>();
@@ -124,7 +123,7 @@ public class ValidationItemControllerV2 {
         log.info("item.region={}", item1.getRegions());
         log.info("item.itemType={}", item1.getItemType());
 
-        Item savedItem = itemRepository.save(item1);
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item1);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("IsSaved", true);
         return "redirect:/v2/basic/items/{itemId}";
@@ -132,7 +131,7 @@ public class ValidationItemControllerV2 {
     }
 
     //    @PostMapping("/add")
-    public String addItemV2(Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String addItemV2(hello.springmvc.itemservice.domain.Item.Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
 
         //검증로직
@@ -164,7 +163,7 @@ public class ValidationItemControllerV2 {
         log.info("item.region={}", item1.getRegions());
         log.info("item.itemType={}", item1.getItemType());
 
-        Item savedItem = itemRepository.save(item1);
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item1);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("IsSaved", true);
         return "redirect:/v2/basic/items/{itemId}";
@@ -173,7 +172,7 @@ public class ValidationItemControllerV2 {
 
 
     //    @PostMapping("/add")
-    public String addItemV3(Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String addItemV3(hello.springmvc.itemservice.domain.Item.Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         //검증로직
         if (!StringUtils.hasText(item1.getItemName())) {
@@ -204,7 +203,7 @@ public class ValidationItemControllerV2 {
         log.info("item.region={}", item1.getRegions());
         log.info("item.itemType={}", item1.getItemType());
 
-        Item savedItem = itemRepository.save(item1);
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item1);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("IsSaved", true);
         return "redirect:/v2/basic/items/{itemId}";
@@ -213,7 +212,7 @@ public class ValidationItemControllerV2 {
 
 
     //    @PostMapping("/add")
-    public String addItemV4(Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String addItemV4(hello.springmvc.itemservice.domain.Item.Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         log.info("objectName = {}", bindingResult.getObjectName());
         log.info("target = {}", bindingResult.getTarget());
 
@@ -247,7 +246,7 @@ public class ValidationItemControllerV2 {
         log.info("item.region={}", item1.getRegions());
         log.info("item.itemType={}", item1.getItemType());
 
-        Item savedItem = itemRepository.save(item1);
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item1);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("IsSaved", true);
         return "redirect:/v2/basic/items/{itemId}";
@@ -255,7 +254,7 @@ public class ValidationItemControllerV2 {
     }
 
     //    @PostMapping("/add")
-    public String addItemV5(@ModelAttribute Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String addItemV5(@ModelAttribute hello.springmvc.itemservice.domain.Item.Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         log.info("objectName = {}", bindingResult.getObjectName());
         log.info("target = {}", bindingResult.getTarget());
 
@@ -273,7 +272,7 @@ public class ValidationItemControllerV2 {
         log.info("item.region={}", item1.getRegions());
         log.info("item.itemType={}", item1.getItemType());
 
-        Item savedItem = itemRepository.save(item1);
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item1);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("IsSaved", true);
         return "redirect:/v2/basic/items/{itemId}";
@@ -282,7 +281,7 @@ public class ValidationItemControllerV2 {
 
 
     @PostMapping("/add")
-    public String addItemV6(@Validated @ModelAttribute Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    public String addItemV6(@Validated @ModelAttribute hello.springmvc.itemservice.domain.Item.Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         log.info("objectName = {}", bindingResult.getObjectName());
         log.info("target = {}", bindingResult.getTarget());
 
@@ -299,7 +298,7 @@ public class ValidationItemControllerV2 {
         log.info("item.region={}", item1.getRegions());
         log.info("item.itemType={}", item1.getItemType());
 
-        Item savedItem = itemRepository.save(item1);
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item1);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("IsSaved", true);
         return "redirect:/v2/basic/items/{itemId}";
@@ -309,17 +308,17 @@ public class ValidationItemControllerV2 {
 
     @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId, Model model) {
-        Item item = itemRepository.findById(itemId);
+        hello.springmvc.itemservice.domain.Item.Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
         log.info("edit open = {}", item.getOpen());
         return "validation/v2/editForm";
     }
 
     @PostMapping("/{itemId}/edit")
-    public String edit(@PathVariable Long itemId, @ModelAttribute ItemUpdateParamDto itemUpdateParamDto) {
-        itemRepository.update(itemId, itemUpdateParamDto);
-        log.info("itemUpdateParamDto open ={}", itemUpdateParamDto.getOpen());
-        log.info("edit regions = {}", itemUpdateParamDto.getRegions());
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
+        itemRepository.update(itemId, item);
+        log.info("itemUpdateParamDto open ={}", item.getOpen());
+        log.info("edit regions = {}", item.getRegions());
         return "redirect:/v2/basic/items/{itemId}";
 
     }

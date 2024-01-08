@@ -1,10 +1,6 @@
 package hello.springmvc.itemservice.web.validation;
 
-import hello.springmvc.itemservice.domain.Item.DeliveryCode;
-import hello.springmvc.itemservice.domain.Item.Item;
-import hello.springmvc.itemservice.domain.Item.ItemRepository;
-import hello.springmvc.itemservice.domain.Item.ItemType;
-import hello.springmvc.itemservice.domain.dto.ItemUpdateParamDto;
+import hello.springmvc.itemservice.domain.Item.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -28,7 +23,7 @@ import java.util.Map;
 public class ValidationItemControllerV3 {
 
     private final ItemRepository itemRepository;
-    private final ItemValidator itemValidator;
+//    private final ItemValidator itemValidator;
 //    private final UpdatedItemValidator updatedItemValidator;
 
 //    public ValidationItemControllerV3(ItemRepository itemRepository, ItemValidator itemValidator, UpdatedItemValidator updatedItemValidator) {
@@ -37,12 +32,12 @@ public class ValidationItemControllerV3 {
 //        this.updatedItemValidator = updatedItemValidator;
 //    }
 
-
-    @InitBinder
-    public void init(WebDataBinder dataBinder) {
-        dataBinder.addValidators(itemValidator);
-//        dataBinder.addValidators(updatedItemValidator);
-    }
+//
+//    @InitBinder
+//    public void init(WebDataBinder dataBinder) {
+//        dataBinder.addValidators(itemValidator);
+////        dataBinder.addValidators(updatedItemValidator);
+//    }
 
 
     //모델에 자동으로 담기게 된다
@@ -76,7 +71,7 @@ public class ValidationItemControllerV3 {
     @GetMapping
     public String items(Model model) {
 
-        List<Item> items = itemRepository.findAll();
+        List<hello.springmvc.itemservice.domain.Item.Item> items = itemRepository.findAll();
         log.info("getmapping items = {}", items);
         model.addAttribute("items", items);
         return "validation/v3/items";
@@ -85,7 +80,7 @@ public class ValidationItemControllerV3 {
 
     @GetMapping("/{itemId}") //itemId
     public String item(@PathVariable Long itemId, Model model) {
-        Item item = itemRepository.findById(itemId);
+        hello.springmvc.itemservice.domain.Item.Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
         return "validation/v3/item";
 
@@ -94,14 +89,14 @@ public class ValidationItemControllerV3 {
 
     @GetMapping("/add")
     public String addForm(Model model) {
-        model.addAttribute("item", new Item());
+        model.addAttribute("item", new hello.springmvc.itemservice.domain.Item.Item());
 
         return "validation/v3/addForm";
     }
 
 
-    @PostMapping("/add")
-    public String addItem(@Validated @ModelAttribute Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    //    @PostMapping("/add")
+    public String addItem(@Validated @ModelAttribute hello.springmvc.itemservice.domain.Item.Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         log.info("objectName = {}", bindingResult.getObjectName());
         log.info("target = {}", bindingResult.getTarget());
 
@@ -124,7 +119,39 @@ public class ValidationItemControllerV3 {
         log.info("item.region={}", item1.getRegions());
         log.info("item.itemType={}", item1.getItemType());
 
-        Item savedItem = itemRepository.save(item1);
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item1);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("IsSaved", true);
+        return "redirect:/v3/basic/items/{itemId}";
+
+    }
+
+
+    @PostMapping("/add")
+    public String addItem2(@Validated(SaveCheck.class) @ModelAttribute hello.springmvc.itemservice.domain.Item.Item item1, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+        log.info("objectName = {}", bindingResult.getObjectName());
+        log.info("target = {}", bindingResult.getTarget());
+
+
+        //특정필드가 아닌 복합 룰 검증
+        if (item1.getPrice() != null && item1.getQuantity() != null) {
+            int resultPrice = item1.getPrice() * item1.getQuantity();
+            if (resultPrice < 10000) {
+                bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
+            }
+        }
+        //검증에 실패하면 다시 입력 폼으로
+        if (bindingResult.hasErrors()) {
+            log.info("error = {}", bindingResult);
+            return "validation/v3/addForm";
+
+        }
+
+        log.info("item.open={}", item1.getOpen());
+        log.info("item.region={}", item1.getRegions());
+        log.info("item.itemType={}", item1.getItemType());
+
+        hello.springmvc.itemservice.domain.Item.Item savedItem = itemRepository.save(item1);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("IsSaved", true);
         return "redirect:/v3/basic/items/{itemId}";
@@ -134,7 +161,7 @@ public class ValidationItemControllerV3 {
 
     @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId, Model model) {
-        Item item = itemRepository.findById(itemId);
+        hello.springmvc.itemservice.domain.Item.Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
         log.info("edit open = {}", item.getOpen());
         return "validation/v3/editForm";
@@ -163,8 +190,8 @@ public class ValidationItemControllerV3 {
 //        return "redirect:/v3/basic/items/{itemId}";
 //
 //    }
-    @PostMapping("/{itemId}/edit")
-    public String edit(@PathVariable Long itemId, @Validated @ModelAttribute Item item, BindingResult bindingResult) {
+//    @PostMapping("/{itemId}/edit")
+    public String edit(@PathVariable Long itemId, @Validated @ModelAttribute hello.springmvc.itemservice.domain.Item.Item item, BindingResult bindingResult) {
 
         //특정필드가 아닌 복합 룰 검증
         if (item.getPrice() != null && item.getQuantity() != null) {
@@ -183,7 +210,43 @@ public class ValidationItemControllerV3 {
 
         //item으로 받고 그 값들을
         //dto로 변환해서 넘기면 되지 않을까?
-        ItemUpdateParamDto itemUpdateParamDto1 = new ItemUpdateParamDto();
+        Item itemUpdateParamDto1 = new Item();
+        itemUpdateParamDto1.setItemName(item.getItemName());
+        itemUpdateParamDto1.setItemType(item.getItemType());
+        itemUpdateParamDto1.setPrice(item.getPrice());
+        itemUpdateParamDto1.setQuantity(item.getQuantity());
+        itemUpdateParamDto1.setRegions(item.getRegions());
+        itemUpdateParamDto1.setOpen(item.getOpen());
+        itemUpdateParamDto1.setDeliveryCode(item.getDeliveryCode());
+
+        itemRepository.update(itemId, itemUpdateParamDto1);
+        log.info("itemUpdateParamDto open ={}", itemUpdateParamDto1.getOpen());
+        log.info("edit regions = {}", itemUpdateParamDto1.getRegions());
+        return "redirect:/v3/basic/items/{itemId}";
+
+    }
+
+    @PostMapping("/{itemId}/edit")
+    public String edit2(@PathVariable Long itemId, @Validated(UpdateCheck.class) @ModelAttribute hello.springmvc.itemservice.domain.Item.Item item, BindingResult bindingResult) {
+
+        //특정필드가 아닌 복합 룰 검증
+        if (item.getPrice() != null && item.getQuantity() != null) {
+            int resultPrice = item.getPrice() * item.getQuantity();
+            if (resultPrice < 10000) {
+                bindingResult.reject("totalPriceMin", new Object[]{10000, resultPrice}, null);
+            }
+        }
+        //검증에 실패하면 다시 입력 폼으로
+        if (bindingResult.hasErrors()) {
+            log.info("edit error = {}", bindingResult);
+            return "validation/v3/addForm";
+
+        }
+
+
+        //item으로 받고 그 값들을
+        //dto로 변환해서 넘기면 되지 않을까?
+        Item itemUpdateParamDto1 = new Item();
         itemUpdateParamDto1.setItemName(item.getItemName());
         itemUpdateParamDto1.setItemType(item.getItemType());
         itemUpdateParamDto1.setPrice(item.getPrice());
@@ -205,8 +268,8 @@ public class ValidationItemControllerV3 {
     @PostConstruct
     public void init() {
 
-        itemRepository.save(new Item("itemAv3", 1000, 10));
-        itemRepository.save(new Item("itemBv3", 1000, 10));
+        itemRepository.save(new hello.springmvc.itemservice.domain.Item.Item("itemAv3", 1000, 10));
+        itemRepository.save(new hello.springmvc.itemservice.domain.Item.Item("itemBv3", 1000, 10));
         log.info("itemRepository= {}", itemRepository);
 
     }
