@@ -1,6 +1,5 @@
 package hello.springmvc.itemservice.domain.Item;
 
-import hello.springmvc.itemservice.domain.dto.ItemUpdateParamDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -30,15 +29,15 @@ public class ItemRepository { //아이템 저장소
 
     }
 
-    public void update(Long itemId, ItemUpdateParamDto itemUpdateParamDto) {
+    public void update(Long itemId, Item item) {
         Item findItem = findById(itemId);
-        findItem.setItemName(itemUpdateParamDto.getItemName());
-        findItem.setPrice(itemUpdateParamDto.getPrice());
-        findItem.setQuantity(itemUpdateParamDto.getQuantity());
-        findItem.setOpen(itemUpdateParamDto.getOpen());
-        findItem.setRegions(itemUpdateParamDto.getRegions());
-        findItem.setItemType(itemUpdateParamDto.getItemType());
-        findItem.setDeliveryCode(itemUpdateParamDto.getDeliveryCode());
+        findItem.setItemName(item.getItemName());
+        findItem.setPrice(item.getPrice());
+        findItem.setQuantity(item.getQuantity());
+        findItem.setOpen(item.getOpen());
+        findItem.setRegions(item.getRegions());
+        findItem.setItemType(item.getItemType());
+        findItem.setDeliveryCode(item.getDeliveryCode());
 
     }
 

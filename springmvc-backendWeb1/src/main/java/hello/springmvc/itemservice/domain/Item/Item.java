@@ -1,21 +1,25 @@
 package hello.springmvc.itemservice.domain.Item;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
 
 @NoArgsConstructor
-@Getter
-@Setter
-
-
+//@Getter
+//@Setter
+@Data
 public class Item {
+    //    @NotNull(groups = UpdateCheck.class)
     private Long id;
+    //    @NotBlank(groups = {SaveCheck.class, UpdateCheck.class})
     private String itemName;
+    //    @NotNull(groups = {SaveCheck.class, UpdateCheck.class})
+//    @Range(min = 1000, max = 1000000, groups = {SaveCheck.class, UpdateCheck.class})
     private Integer price;
+    //    @NotNull(groups = {SaveCheck.class, UpdateCheck.class})
+//    @Max(value = 9999, groups = {SaveCheck.class})
     private Integer quantity;
 
     private Boolean open; //판매여부
@@ -31,5 +35,17 @@ public class Item {
 
     }
 
-
+    @Override
+    public String toString() {
+        return "Item{" +
+            "id=" + id +
+            ", itemName='" + itemName + '\'' +
+            ", price=" + price +
+            ", quantity=" + quantity +
+            ", open=" + open +
+            ", regions=" + regions +
+            ", itemType=" + itemType +
+            ", deliveryCode='" + deliveryCode + '\'' +
+            '}';
+    }
 }
