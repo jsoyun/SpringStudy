@@ -1,4 +1,4 @@
-package hello.springmvc.itemservice.domain.Item;
+package hello.login.domain.item;
 
 import org.springframework.stereotype.Repository;
 
@@ -36,7 +36,6 @@ public class ItemRepository { //아이템 저장소
         findItem.setQuantity(item.getQuantity());
         findItem.setOpen(item.getOpen());
         findItem.setRegions(item.getRegions());
-        findItem.setItemType(item.getItemType());
         findItem.setDeliveryCode(item.getDeliveryCode());
 
     }

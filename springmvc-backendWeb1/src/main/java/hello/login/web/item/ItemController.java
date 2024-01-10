@@ -27,20 +27,20 @@ public class ItemController {
     public String items(Model model) {
         List<Item> items = itemRepository.findAll();
         model.addAttribute("items", items);
-        return "items/items";
+        return "basic02/items/items";
     }
 
     @GetMapping("/{itemId}")
     public String item(@PathVariable long itemId, Model model) {
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
-        return "items/item";
+        return "basic02/items/item";
     }
 
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("item", new Item());
-        return "items/addForm";
+        return "basic02/items/addForm";
     }
 
     @PostMapping("/add")
@@ -56,7 +56,7 @@ public class ItemController {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
-            return "items/addForm";
+            return "basic02/items/addForm";
         }
 
         //성공 로직
@@ -75,7 +75,7 @@ public class ItemController {
     public String editForm(@PathVariable Long itemId, Model model) {
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
-        return "items/editForm";
+        return "basic02/items/editForm";
     }
 
     @PostMapping("/{itemId}/edit")
@@ -91,7 +91,7 @@ public class ItemController {
 
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
-            return "items/editForm";
+            return "basic02/items/editForm";
         }
 
         Item itemParam = new Item();

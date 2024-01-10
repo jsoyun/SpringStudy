@@ -1,4 +1,4 @@
-package hello.springmvc.itemservice.web.validation.form;
+package hello.login.web.item.form;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;

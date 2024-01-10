@@ -1,4 +1,4 @@
-package hello.springmvc.itemservice.domain.Item;
+package hello.login.domain.item;
 
 public interface UpdateCheck {
 }

@@ -1,4 +1,4 @@
-package hello.springmvc.itemservice.domain.Item;
+package hello.login.domain.item;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,6 @@ public class Item {
 
     private Boolean open; //판매여부
     private List<String> regions; //등록지역
-    private ItemType itemType; //상품종류
     private String deliveryCode; //배송방식
 
 
@@ -43,8 +42,7 @@ public class Item {
             ", price=" + price +
             ", quantity=" + quantity +
             ", open=" + open +
-            ", regions=" + regions +
-            ", itemType=" + itemType +
+
             ", deliveryCode='" + deliveryCode + '\'' +
             '}';
     }
